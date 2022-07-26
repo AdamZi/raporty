@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const router = express.Router();
 const { client } = require("./../db");
 
@@ -8,7 +9,7 @@ router.post("/ocr", (req, res) => {
 });
 
 router.post("/try", async (req, res) => {
-  const fileName = __dirname + `./../../public/rap${req.body.number}.jpg`;
+  const fileName = path.resolve("public", `rap${req.body.number}.jpg`);
   const vision = require("@google-cloud/vision");
   const client = new vision.ImageAnnotatorClient();
   const [result] = await client.documentTextDetection(fileName);
