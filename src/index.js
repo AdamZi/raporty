@@ -9,5 +9,5 @@ app.use(express.static(__dirname + "/../public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/api", api);
-console.log(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+
 app.listen(port, () => console.log(`server listening on port ${port}`));

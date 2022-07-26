@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { client } = require("./../db");
 
 router.post("/ocr", (req, res) => {
   console.log(req.body);
