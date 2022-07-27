@@ -22,17 +22,17 @@ router.post("/try", async (req, res) => {
     /(\d{1,4},\d{2}(?=PLN))|(\d{1,4},\d{2}(?= Anul))|((?<=sprzedaży )\d{1,4},\d{2})/m;
   const regex3 = /(?<=Logowanie . )\d+\.\d+\.\d+/m;
   let busNumber = ocr.match(regex1);
-  busNumber = busNumber ? busNumber.find(el => el != null) : "not recognized";
+  busNumber = busNumber ? busNumber.find(el => el) : "not recognized";
   let amount = ocr.match(regex2);
-  amount = amount ? amount.find(el => el != null) : "not recognized";
+  amount = amount ? amount.find(el => el) : "not recognized";
   let date = ocr.match(regex3);
-  date = date ? date.find(el => el != null) : "not recognized";
 
-  const report = {
-    busNumber: busNumber,
-    amount: amount,
-    date: date,
-  };
+  if (date) {
+    date = date.find(el => el);
+    date = "20" + date.split(".").reverse().join("-");
+  } else date = "note recognized";
+
+  const report = { busNumber, amount, date };
 
   console.log(ocr, report);
   res.send(report);
