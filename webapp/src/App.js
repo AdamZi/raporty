@@ -1,24 +1,33 @@
 import React from "react";
 import Form from "./Form";
 import "./App.css";
-import Camera from "react-html5-camera-photo";
+import Camera, { FACING_MODES } from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 
 class App extends React.Component {
-  render() {
-    function handleTakePhoto(dataUri) {
-      // Do stuff with the photo...
-      console.log("takePhoto", dataUri.length);
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      photo: null,
+    };
+  }
 
+  handleTakePhoto = dataUri => {
+    console.log(dataUri.length);
+    this.setState({ photo: dataUri });
+  };
+
+  render() {
     return (
       <>
         <Camera
-          onTakePhoto={dataUri => {
-            handleTakePhoto(dataUri);
-          }}
+          onTakePhoto={this.handleTakePhoto}
+          idealFacingMode={FACING_MODES.ENVIRONMENT}
+          //isMaxResolution={true}
+          isSilentMode={true}
         />
-        <Form />;
+        <Form />
+        <img src={this.state.photo} alt="" />
       </>
     );
   }
