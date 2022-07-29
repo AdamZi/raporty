@@ -30,7 +30,7 @@ class App extends React.Component {
           console.log("Error: " + response.error);
           return;
         }
-        console.log(response);
+        console.log(response + "aaa");
       });
 
     console.log(dataUri.length);
