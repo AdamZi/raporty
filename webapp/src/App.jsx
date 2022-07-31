@@ -8,7 +8,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      photo: null,
+      report: {},
     };
   }
 
@@ -30,14 +30,15 @@ class App extends React.Component {
           console.log("Error: " + response.error);
           return;
         }
-        console.log(response + "aaa");
+        console.log(response);
+        this.setState({ report: response });
       });
 
     console.log(dataUri.length);
-    this.setState({ photo: dataUri });
   };
 
   render() {
+    const { report } = this.state;
     return (
       <>
         <Camera
@@ -47,7 +48,7 @@ class App extends React.Component {
           //isMaxResolution={true}
           isSilentMode={true}
         />
-        <Form />
+        <Form report={report} />
         <img src={this.state.photo} alt="" />
       </>
     );
