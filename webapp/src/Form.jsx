@@ -4,17 +4,13 @@ class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      report: {
-        date: new Date().toLocaleDateString("en-CA"),
-        amount: "",
-        busNumber: "",
-      },
-      oldProps: null,
+      report: this.props.report,
+      oldProps: this.props.report,
     };
   }
 
   componentDidUpdate() {
-    const report = this.props.report;
+    const { report } = this.props;
     if (this.state.oldProps !== report) {
       this.setState({ report: this.props.report, oldProps: report });
     }
@@ -22,7 +18,37 @@ class Form extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    console.log(this.state);
+    //console.log(this.state);
+    const { report } = this.state;
+    const date = new Date(report.date.replace("-", "/"));
+    const reportToSend = {
+      date: date.toISOString(),
+      amount: report.amount.replace(",", "."),
+      busNumber: report.busNumber,
+    };
+    fetch("api/add", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(reportToSend),
+    })
+      .then(response => response.json())
+      .then(response => {
+        if (response.error) {
+          console.log("Error: " + response.error);
+          return;
+        }
+        console.log(response);
+      });
+    //console.log(reportToSend, "sss");
+    this.setState({
+      report: {
+        ...report,
+        amount: "",
+        busNumber: "",
+      },
+    });
   };
 
   handleChange = e => {
@@ -38,8 +64,9 @@ class Form extends React.Component {
   render() {
     const { report } = this.state;
     if (report.date === "not recognized")
-      report.date = new Date().toLocaleDateString("en-CA");
+      report.date = new Date().toLocaleDateString("en-gb");
     if (report.busNumber === "not recognized") report.busNumber = "";
+    if (report.amount === "not recognized") report.amount = "";
     return (
       <form onSubmit={this.handleSubmit}>
         <input

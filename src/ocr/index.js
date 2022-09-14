@@ -16,7 +16,7 @@ const recognizeReport = async imageString => {
     .join(" ");
   const regex1 = /(?<= # )\d{1,3}/m;
   const regex2 =
-    /(\d{1,4},\d{2}(?=PLN))|(\d{1,4},\d{2}(?= Anul))|((?<=sprzedaży )\d{1,4},\d{2})/m;
+    /(\d{1,4},\d{2}(?= PLN))|(\d{1,4},\d{2}(?= Anul))|((?<=sprzedaży )\d{1,4},\d{2})/m;
   const regex3 = /(?<=Logowanie . )\d+\.\d+\.\d+/m;
   let busNumber = ocr.match(regex1);
   busNumber = busNumber ? busNumber.find(el => el) : "not recognized";

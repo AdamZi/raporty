@@ -8,9 +8,42 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      report: {},
+      report: {
+        date: new Date().toLocaleDateString("en-CA"),
+        amount: "",
+        busNumber: "",
+      },
+      reports: [],
+      sum: 0,
     };
   }
+
+  getSum = () => {
+    const today = new Date();
+    const fromDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    const dates = {
+      fromDate: fromDate.toString(),
+      toDate: today.toISOString(),
+    };
+
+    fetch("/api/get-sum", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(dates),
+    })
+      .then(response => response.json())
+      .then(response => {
+        if (response.error) {
+          console.log("Error: ", response.error);
+        }
+        console.log(response);
+        if (response.length) {
+          this.setState({ sum: response[0].sum });
+        }
+      });
+  };
 
   handleTakePhoto = dataUri => {
     const photo = {
@@ -30,15 +63,20 @@ class App extends React.Component {
           console.log("Error: " + response.error);
           return;
         }
-        console.log(response);
+        // console.log(response);
         this.setState({ report: response });
       });
 
     console.log(dataUri.length);
   };
 
+  componentDidMount() {
+    this.getSum();
+  }
+
   render() {
     const { report } = this.state;
+    console.log(report);
     return (
       <>
         <Camera
@@ -50,6 +88,7 @@ class App extends React.Component {
         />
         <Form report={report} />
         <img src={this.state.photo} alt="" />
+        <label>Suma: </label> <output>{this.state.sum}</output>
       </>
     );
   }
