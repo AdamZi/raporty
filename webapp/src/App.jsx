@@ -1,6 +1,6 @@
 import React from "react";
 import Form from "./Form";
-import "./App.css";
+import { Header } from "./Header";
 import Camera, { FACING_MODES, IMAGE_TYPES } from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 
@@ -22,7 +22,7 @@ class App extends React.Component {
     const today = new Date();
     const fromDate = new Date(today.getFullYear(), today.getMonth(), 1);
     const dates = {
-      fromDate: fromDate.toString(),
+      fromDate: fromDate.toISOString(),
       toDate: today.toISOString(),
     };
 
@@ -79,16 +79,18 @@ class App extends React.Component {
     console.log(report);
     return (
       <>
-        <Camera
-          onTakePhoto={this.handleTakePhoto}
-          idealFacingMode={FACING_MODES.ENVIRONMENT}
-          imageType={IMAGE_TYPES.JPG}
-          //isMaxResolution={true}
-          isSilentMode={true}
-        />
-        <Form report={report} />
-        <img src={this.state.photo} alt="" />
-        <label>Suma: </label> <output>{this.state.sum}</output>
+        <Header></Header>
+        <div className="md:container md:mx-auto max-w-sm">
+          <Camera
+            onTakePhoto={this.handleTakePhoto}
+            idealFacingMode={FACING_MODES.ENVIRONMENT}
+            imageType={IMAGE_TYPES.JPG}
+            //isMaxResolution={true}
+            isSilentMode={true}
+          />
+          <Form report={report} handleSubmit={this.getSum} />
+          <label>Suma: </label> <output>{this.state.sum}</output>
+        </div>
       </>
     );
   }
