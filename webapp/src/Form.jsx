@@ -40,6 +40,7 @@ class Form extends React.Component {
           return;
         }
         console.log(response);
+        this.props.handleSubmit();
       });
     //console.log(reportToSend, "sss");
     this.setState({
@@ -64,7 +65,7 @@ class Form extends React.Component {
   render() {
     const { report } = this.state;
     if (report.date === "not recognized")
-      report.date = new Date().toLocaleDateString("en-gb");
+      report.date = new Date().toLocaleDateString("en-CA");
     if (report.busNumber === "not recognized") report.busNumber = "";
     if (report.amount === "not recognized") report.amount = "";
     return (
